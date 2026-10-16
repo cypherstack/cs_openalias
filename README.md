@@ -78,18 +78,23 @@ Errors thrown by `isValidAddress` propagate.
 ## Development
 
 In the repository, with Dart 3.10 and rustup (Rust 1.90.0 and the target you
-build for), `dart tool/check.dart` runs format, analyze, the unit tests and a
-publish dry run, and `OPENALIAS_LIVE_TESTS=1` enables the live test against
-dns.google.
+build for), `dart tool/check.dart` runs format, analyze, the unit and
+integration tests and a publish dry run, `OPENALIAS_LIVE_TESTS=1` enables the
+live test against dns.google, `example/tool/generate_fixtures.sh` regenerates
+the integration fixtures from `DNSSEC_RESOLVER_DIR` (default
+`../../dnssec_resolver` from `example/`) and `example/bin/main.dart` performs
+one lookup.
 
 ```sh
 dart tool/check.dart
 OPENALIAS_LIVE_TESTS=1 dart test test/live_test.dart
+example/tool/generate_fixtures.sh
+cd example && dart run bin/main.dart donate@getmonero.org
 ```
 
 To develop against local checkouts of `openalias`, `dnssec_resolver` and
 `doh_transport`, clone them beside this repository and add an untracked
-`pubspec_overrides.yaml` here:
+`pubspec_overrides.yaml` here and in `example/`:
 
 ```yaml
 dependency_overrides:
@@ -100,6 +105,8 @@ dependency_overrides:
   doh_transport:
     path: ../doh_transport
 ```
+
+In `example/`, the paths start with `../../`.
 
 ## License
 
