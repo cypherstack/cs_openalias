@@ -10,7 +10,7 @@ final class CsOpenAliasProxy {
   const CsOpenAliasProxy({required this.address, required this.port});
 }
 
-/// A recipient from a DNSSEC-secure `oa1:xmr` record.
+/// A recipient from a DNSSEC-secure `oa1:<application>` record.
 final class CsOpenAliasRecipient {
   /// The alias that was looked up, lowercased with `user@domain` turned into
   /// `user.domain`.

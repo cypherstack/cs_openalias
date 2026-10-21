@@ -8,6 +8,7 @@ typedef _Resolve =
       String alias, {
       required bool Function(String address) isValidAddress,
       required CsOpenAliasProxy? proxy,
+      required String application,
     });
 
 // Fails to compile when a leaf is added or removed.
@@ -55,6 +56,7 @@ void main() {
       'not-a-domain',
       isValidAddress: (_) => true,
       proxy: null,
+      application: 'xmr',
     );
     await expectLater(
       operation.result,
@@ -69,9 +71,25 @@ void main() {
         'alice.example',
         isValidAddress: (_) => true,
         proxy: const CsOpenAliasProxy(address: 'localhost', port: 9050),
+        application: 'xmr',
       ),
       throwsArgumentError,
     );
+  });
+
+  test('an invalid application tag is a programmer error', () {
+    for (final application in ['', 'XMR', 'oa1:xmr', 'x mr', '-xmr']) {
+      expect(
+        () => resolveOpenAlias(
+          'alice.example',
+          isValidAddress: (_) => true,
+          proxy: null,
+          application: application,
+        ),
+        throwsArgumentError,
+        reason: application,
+      );
+    }
   });
 
   group('exceptions', () {

@@ -1,6 +1,6 @@
 # cs_openalias
 
-OpenAlias lookups for Monero wallets: DNS over HTTPS from `doh_transport`,
+OpenAlias lookups for wallets: DNS over HTTPS from `doh_transport`,
 on-device DNSSEC validation from `dnssec_resolver`, and record parsing from
 `openalias`, behind one call.
 
@@ -12,6 +12,7 @@ import 'package:cs_openalias/cs_openalias.dart';
 final lookup = resolveOpenAlias(
   'donate@getmonero.org',
   isValidAddress: isValidMoneroAddress,
+  application: 'xmr', // the tag in `oa1:xmr`; 'btc' for Bitcoin
   proxy: torEnabled
       ? const CsOpenAliasProxy(address: '127.0.0.1', port: 9050)
       : null,
@@ -46,8 +47,8 @@ name.
   10 s, 20 s and 40 s. At most 64 queries per lookup, validated from the IANA
   root keys.
 - Only a DNSSEC-secure TXT answer for the alias is used. Other records are
-  ignored without being decoded. Of its `oa1:xmr` records exactly one
-  recipient address must remain, and it must pass `isValidAddress`. A
+  ignored without being decoded. Of its `oa1:<application>` records exactly
+  one recipient address must remain, and it must pass `isValidAddress`. A
   non-empty `tx_payment_id` is rejected. `recipient_name` and
   `tx_description` are untrusted display text; `checksum` and
   `address_signature` are not verified.
@@ -67,7 +68,7 @@ users is the app's choice.
 | Leaf | Meaning |
 | --- | --- |
 | `CsOpenAliasInvalidAliasException` | not an alias |
-| `CsOpenAliasNoRecordException` | no `oa1:xmr` record, or DNSSEC proved there is no TXT record |
+| `CsOpenAliasNoRecordException` | no record with the application tag, or DNSSEC proved there is no TXT record |
 | `CsOpenAliasInvalidRecordException` | malformed or non-UTF-8 record, duplicate or unsupported field, oversized record, several addresses or conflicting records, or address rejected |
 | `CsOpenAliasDnssecException` | not secure; `status` is `insecure`, `bogus` or `indeterminate` |
 | `CsOpenAliasNetworkException` | connection, proxy, TLS or HTTP failure, error rcode, CNAME loop, chain or conflict, mismatched question, malformed or oversized response, validator unavailable, or an oversized answer; `timeout` is set when a deadline passed |

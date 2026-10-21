@@ -10,6 +10,7 @@ void main() {
     alias,
     isValidAddress: (address) => address.isNotEmpty,
     proxy: null,
+    application: 'xmr',
   ).result;
 
   test('a signed alias resolves through dns.google', () async {

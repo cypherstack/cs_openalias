@@ -22,10 +22,12 @@ void main() {
     String alias = 'alice.example',
     bool Function(String)? isValidAddress,
     CsOpenAliasProxy? proxy,
+    String application = 'xmr',
   }) => startOpenAliasLookup(
     alias,
     isValidAddress: isValidAddress ?? (address) => address == 'valid',
     proxy: proxy,
+    application: application,
     openTransport: network.open,
     lookup: lookup.start,
   );
@@ -90,6 +92,29 @@ void main() {
         ]),
       );
       expect((await start(lookup).result).address, 'valid');
+    });
+
+    test('the application selects the records that are read', () async {
+      final lookup = FakeLookup(
+        () => answer('alice.example', [
+          _alice,
+          'oa1:btc recipient_address=valid; recipient_name=Bob;',
+          'oa1:btcx recipient_address=other;',
+          [...ascii.encode('oa1:xmr recipient_address='), 0xff],
+        ]),
+      );
+      final recipient = await start(lookup, application: 'btc').result;
+
+      expect(recipient.address, 'valid');
+      expect(recipient.fields['recipient_name'], 'Bob');
+    });
+
+    test('an invalid application is rejected before anything is sent', () {
+      expect(
+        () => start(FakeLookup(), application: 'Btc'),
+        throwsArgumentError,
+      );
+      expect(network.opened, isEmpty);
     });
 
     test('a non-UTF-8 oa1:xmr record is an invalid record', () async {
@@ -415,6 +440,7 @@ void main() {
           'alice.example',
           isValidAddress: (_) => true,
           proxy: null,
+          application: 'xmr',
           openTransport: network.open,
           lookup: (_, _, _) => throw ArgumentError('bad configuration'),
         ),

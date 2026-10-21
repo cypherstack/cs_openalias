@@ -8,8 +8,6 @@ import 'exceptions.dart';
 import 'models.dart';
 import 'transport.dart';
 
-const _application = 'xmr';
-
 /// Whether [input] normalises to an OpenAlias name.
 bool isOpenAlias(String input) {
   try {
@@ -21,19 +19,26 @@ bool isOpenAlias(String input) {
 }
 
 /// Looks up [alias] over DNS over HTTPS, validates the answer with DNSSEC on
-/// the device and returns exactly one recipient address among its `oa1:xmr`
-/// records.
+/// the device and returns exactly one recipient address among its
+/// `oa1:<application>` records. [application] is the application tag, the
+/// `xmr` in `oa1:xmr`; records with other tags are ignored.
 ///
 /// With a null [proxy] the lookup connects directly to the resolver;
-/// otherwise only through the proxy. A non-numeric proxy address or an
-/// invalid port throws [ArgumentError]. Every other failure is a
-/// [CsOpenAliasException] from the operation's result, and errors thrown by
-/// [isValidAddress] propagate.
+/// otherwise only through the proxy. A non-numeric proxy address, an invalid
+/// port or an [application] that is not a valid tag throws
+/// [ArgumentError]. Every other failure is a [CsOpenAliasException] from the
+/// operation's result, and errors thrown by [isValidAddress] propagate.
 CsOpenAliasOperation<CsOpenAliasRecipient> resolveOpenAlias(
   String alias, {
   required bool Function(String address) isValidAddress,
   required CsOpenAliasProxy? proxy,
-}) => startOpenAliasLookup(alias, isValidAddress: isValidAddress, proxy: proxy);
+  required String application,
+}) => startOpenAliasLookup(
+  alias,
+  isValidAddress: isValidAddress,
+  proxy: proxy,
+  application: application,
+);
 
 /// Starts a DNSSEC lookup for [domain] over [port].
 typedef SecureLookup =
@@ -60,10 +65,14 @@ CsOpenAliasOperation<CsOpenAliasRecipient> startOpenAliasLookup(
   String alias, {
   required bool Function(String address) isValidAddress,
   required CsOpenAliasProxy? proxy,
+  required String application,
   LookupTransportFactory openTransport = openDohTransport,
   SecureLookup lookup = dnssecLookup,
 }) {
   if (proxy != null) proxyAddress(proxy);
+  if (!oa.isOpenAliasApplication(application)) {
+    throw ArgumentError.value(application, 'application');
+  }
   final String domain;
   try {
     domain = oa.normalizeOpenAlias(alias);
@@ -116,7 +125,7 @@ CsOpenAliasOperation<CsOpenAliasRecipient> startOpenAliasLookup(
       (answer) {
         if (done) return;
         try {
-          finish(_recipient(domain, answer, isValidAddress));
+          finish(_recipient(domain, answer, isValidAddress, application));
         } catch (error, stack) {
           finish(mapLookupFailure(error, stack, domain), stack);
         }
@@ -144,12 +153,13 @@ CsOpenAliasRecipient _recipient(
   String domain,
   DnssecResult answer,
   bool Function(String address) isValidAddress,
+  String application,
 ) {
   final txt = answer.secureTxt();
   final selected = oa.selectOpenAliasRecipient(
     domain: domain,
     records: [for (final record in txt) record.bytes],
-    application: _application,
+    application: application,
     validateAddress: isValidAddress,
   );
   return CsOpenAliasRecipient(

@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:cs_openalias/cs_openalias.dart';
 
+// The application tag, the `xmr` in `oa1:xmr`.
+const _application = 'xmr';
+
 const _usage =
     'Usage: dart run bin/main.dart <alias> [<proxy ip> <proxy port>]';
 
@@ -21,6 +24,7 @@ Future<void> main(List<String> args) async {
       proxy: port == null
           ? null
           : CsOpenAliasProxy(address: args[1], port: port),
+      application: _application,
     );
   } on ArgumentError {
     stderr.writeln(_usage);
@@ -40,7 +44,8 @@ Future<void> main(List<String> args) async {
 
 String _describe(CsOpenAliasException error) => switch (error) {
   CsOpenAliasInvalidAliasException() => 'Not an OpenAlias name',
-  CsOpenAliasNoRecordException() => 'No Monero address is published there',
+  CsOpenAliasNoRecordException() =>
+    'No oa1:$_application record is published there',
   CsOpenAliasInvalidRecordException() =>
     'The published records do not name one usable address',
   CsOpenAliasDnssecException() => 'The answer did not validate with DNSSEC',

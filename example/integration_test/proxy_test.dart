@@ -69,6 +69,7 @@ void main() {
           'donate@getmonero.org',
           isValidAddress: (address) => address.isNotEmpty,
           proxy: via(proxy),
+          application: 'xmr',
         ).result,
         throwsA(isA<CsOpenAliasNetworkException>()),
       );

@@ -172,6 +172,7 @@ final class Harness {
     alias,
     isValidAddress: isValidAddress ?? (address) => address == 'valid',
     proxy: proxy,
+    application: 'xmr',
     openTransport: (proxy) {
       opened++;
       final transport = openDohTransport(

@@ -30,7 +30,8 @@ final class CsOpenAliasInvalidAliasException extends CsOpenAliasException {
   });
 }
 
-/// The name has no `oa1:xmr` record, or DNSSEC proved it has no TXT records.
+/// No record with the application tag, or DNSSEC proved there is no TXT
+/// record.
 final class CsOpenAliasNoRecordException extends CsOpenAliasException {
   const CsOpenAliasNoRecordException(
     super.message, {
