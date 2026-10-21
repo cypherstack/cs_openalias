@@ -26,12 +26,12 @@ jobs:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           repository: cypherstack/dnssec_resolver
-          ref: 8e133d6a60acc5f15ce88fb2d7c9acd603896c55
+          ref: ea1f7c02e55915f7f96c95d8a476fcb3ca78e694
           path: dnssec_resolver
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           repository: cypherstack/doh_transport
-          ref: 3dbac4862762f62cb15a01a064b6861a77bb56ea
+          ref: 72115493b5ab338cceaa8cdc1eb264653620c303
           path: doh_transport
       - uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d
         with:
