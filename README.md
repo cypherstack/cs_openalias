@@ -84,14 +84,14 @@ build for), `dart tool/check.dart` runs format, analyze, the unit and
 integration tests and a publish dry run, `OPENALIAS_LIVE_TESTS=1` enables the
 live test against dns.google, `example/tool/generate_fixtures.sh` regenerates
 the integration fixtures from `DNSSEC_RESOLVER_DIR` (default
-`../../dnssec_resolver` from `example/`) and `example/bin/main.dart` performs
-one lookup.
+`../../dnssec_resolver` from `example/`) and
+`example/cs_openalias_example.dart` performs one lookup.
 
 ```sh
 dart tool/check.dart
 OPENALIAS_LIVE_TESTS=1 dart test test/live_test.dart
 example/tool/generate_fixtures.sh
-cd example && dart run bin/main.dart donate@getmonero.org
+cd example && dart run cs_openalias_example.dart donate@getmonero.org
 ```
 
 To develop against local checkouts of `openalias`, `dnssec_resolver` and

@@ -6,7 +6,8 @@ import 'package:cs_openalias/cs_openalias.dart';
 const _application = 'xmr';
 
 const _usage =
-    'Usage: dart run bin/main.dart <alias> [<proxy ip> <proxy port>]';
+    'Usage: dart run cs_openalias_example.dart '
+    '<alias> [<proxy ip> <proxy port>]';
 
 Future<void> main(List<String> args) async {
   final port = args.length == 3 ? int.tryParse(args[2]) : null;
