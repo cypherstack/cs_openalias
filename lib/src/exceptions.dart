@@ -30,8 +30,7 @@ final class CsOpenAliasInvalidAliasException extends CsOpenAliasException {
   });
 }
 
-/// No record with the application tag, or DNSSEC proved there is no TXT
-/// record.
+/// No record with the application tag, or no TXT record at the name.
 final class CsOpenAliasNoRecordException extends CsOpenAliasException {
   const CsOpenAliasNoRecordException(
     super.message, {

@@ -37,9 +37,9 @@ name.
   lookup happens; TLS still verifies `dns.google`. Queries are padded.
 - `proxy` is required; with `null` the lookup connects directly. With a
   proxy, the lookup connects only through that SOCKS5 proxy, using fresh
-  isolation credentials, and never falls back to a direct connection. The
-  proxy address must be a numeric IP; otherwise `resolveOpenAlias` throws
-  `ArgumentError`.
+  isolation credentials, and never falls back to a direct connection.
+  `resolveOpenAlias` throws `ArgumentError` for a non-numeric proxy address,
+  an invalid proxy port or an invalid application tag.
 - Each lookup owns one transport, reuses its connections and closes it once
   when the lookup succeeds, fails or is cancelled. `cancel` stops the DNSSEC
   lookup and every request in flight.
@@ -55,7 +55,8 @@ name.
 - A package re-validates what crosses a public port whose implementation the
   caller supplies; it does not re-check what a private seam or a known sibling
   package already guarantees. cs_openalias repeats none of its constituents'
-  checks.
+  checks beyond rejecting an invalid application tag or proxy port before any
+  query.
 - The resolver sees every query and, without a proxy, your IP address.
 
 ## Errors
@@ -68,7 +69,7 @@ users is the app's choice.
 | Leaf | Meaning |
 | --- | --- |
 | `CsOpenAliasInvalidAliasException` | not an alias |
-| `CsOpenAliasNoRecordException` | no record with the application tag, or DNSSEC proved there is no TXT record |
+| `CsOpenAliasNoRecordException` | no record with the application tag, or no TXT record at the name |
 | `CsOpenAliasInvalidRecordException` | malformed or non-UTF-8 record, duplicate or unsupported field, oversized record, several addresses or conflicting records, or address rejected |
 | `CsOpenAliasDnssecException` | not secure; `status` is `insecure`, `bogus` or `indeterminate` |
 | `CsOpenAliasNetworkException` | connection, proxy, TLS or HTTP failure, error rcode, CNAME loop, chain or conflict, mismatched question, malformed or oversized response, validator unavailable, or an oversized answer; `timeout` is set when a deadline passed |
