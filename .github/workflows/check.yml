@@ -26,7 +26,7 @@ jobs:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           repository: cypherstack/dnssec_resolver
-          ref: ea1f7c02e55915f7f96c95d8a476fcb3ca78e694
+          ref: b33d6a2ca9e03884dc0d397e3a73fbb6e482e68d
           path: dnssec_resolver
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:

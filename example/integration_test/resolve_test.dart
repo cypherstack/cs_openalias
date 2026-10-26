@@ -37,7 +37,10 @@ void main() {
 
   for (final (alias, status) in [
     ('unsigned.test', CsOpenAliasDnssecStatus.insecure),
+    ('empty.unsigned.test', CsOpenAliasDnssecStatus.insecure),
+    ('missing.unsigned.test', CsOpenAliasDnssecStatus.insecure),
     ('alice.bad-ds.test', CsOpenAliasDnssecStatus.bogus),
+    ('alice.sha1-ds.test', CsOpenAliasDnssecStatus.bogus),
     ('tampered.example.test', CsOpenAliasDnssecStatus.bogus),
   ]) {
     test('$alias is rejected as ${status.name}', () async {
