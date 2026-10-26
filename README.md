@@ -29,7 +29,8 @@ try {
 
 `isOpenAlias` tells whether input is an alias at all. The lookup lowercases
 it and turns `user@domain` into `user.domain`; `recipient.domain` is that
-name.
+name. `isOpenAliasApplication` tells whether a string is a valid application
+tag.
 
 ## Network and trust
 

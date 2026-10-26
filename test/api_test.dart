@@ -37,6 +37,11 @@ void main() {
     }
   });
 
+  test('isOpenAliasApplication accepts tags and rejects others', () {
+    expect(isOpenAliasApplication('xmr'), isTrue);
+    expect(isOpenAliasApplication(''), isFalse);
+  });
+
   test('isOpenAlias rejects input that is not an alias', () {
     for (final input in [
       '',
