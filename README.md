@@ -70,10 +70,10 @@ users is the app's choice.
 | Leaf | Meaning |
 | --- | --- |
 | `CsOpenAliasInvalidAliasException` | not an alias |
-| `CsOpenAliasNoRecordException` | no record with the application tag, or no TXT record at the name |
+| `CsOpenAliasNoRecordException` | no record with the application tag, or a secure denial proof that the name has no TXT record |
 | `CsOpenAliasInvalidRecordException` | malformed or non-UTF-8 record, duplicate or unsupported field, oversized record, several addresses or conflicting records, or address rejected |
 | `CsOpenAliasDnssecException` | not secure; `status` is `insecure`, `bogus` or `indeterminate` |
-| `CsOpenAliasNetworkException` | connection, proxy, TLS or HTTP failure, error rcode, CNAME loop, chain or conflict, mismatched question, malformed or oversized response, validator unavailable, or an oversized answer; `timeout` is set when a deadline passed |
+| `CsOpenAliasNetworkException` | connection, proxy, TLS or HTTP failure, error rcode other than NXDOMAIN, CNAME loop, chain or conflict, mismatched question, malformed or oversized response, validator unavailable, or an oversized answer; `timeout` is set when a deadline passed |
 | `CsOpenAliasCancelledException` | the lookup was cancelled |
 
 Errors thrown by `isValidAddress` propagate.

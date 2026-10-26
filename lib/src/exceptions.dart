@@ -30,7 +30,8 @@ final class CsOpenAliasInvalidAliasException extends CsOpenAliasException {
   });
 }
 
-/// No record with the application tag, or no TXT record at the name.
+/// No record with the application tag, or a secure denial proof that the name
+/// has no TXT record.
 final class CsOpenAliasNoRecordException extends CsOpenAliasException {
   const CsOpenAliasNoRecordException(
     super.message, {
