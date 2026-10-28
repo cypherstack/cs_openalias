@@ -21,10 +21,15 @@ final class CsOpenAliasRecipient {
   /// untrusted display text.
   final Map<String, String> fields;
 
+  /// How long the answer may be reused: the smallest remaining TTL of the
+  /// TXT set and its CNAME chain.
+  final Duration ttl;
+
   CsOpenAliasRecipient({
     required this.domain,
     required this.address,
     required Map<String, String> fields,
+    required this.ttl,
   }) : fields = Map<String, String>.unmodifiable(fields);
 }
 

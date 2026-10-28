@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'dart:math' as math;
+
 import 'package:dnssec_resolver/dnssec_resolver.dart';
 import 'package:doh_transport/doh_transport.dart';
 import 'package:openalias/openalias.dart' as oa;
@@ -162,10 +164,15 @@ CsOpenAliasRecipient _recipient(
     application: application,
     validateAddress: isValidAddress,
   );
+  var ttl = txt.map((record) => record.ttl).reduce(math.min);
+  for (final alias in answer.aliases) {
+    ttl = math.min(ttl, alias.ttl);
+  }
   return CsOpenAliasRecipient(
     domain: domain,
     address: selected.address,
     fields: selected.record.fields,
+    ttl: Duration(seconds: math.max(0, ttl)),
   );
 }
 

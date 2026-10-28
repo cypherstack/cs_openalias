@@ -81,6 +81,32 @@ void main() {
       expect(recipient.address, 'valid');
     });
 
+    test('the recipient carries the smallest TTL of the answer', () async {
+      final direct = await start(
+        FakeLookup(() => answer('alice.example', [_alice], ttl: 300)),
+      ).result;
+      expect(direct.ttl, const Duration(seconds: 300));
+      final chained = await start(
+        FakeLookup(
+          () => answer(
+            'alias.example',
+            [_alice],
+            canonicalName: 'bob.other.example',
+            aliases: [
+              DnssecRecord(
+                name: 'alias.example',
+                type: 5,
+                ttl: 17,
+                data: 'bob.other.example',
+              ),
+            ],
+          ),
+        ),
+        alias: 'alias.example',
+      ).result;
+      expect(chained.ttl, const Duration(seconds: 17));
+    });
+
     test('records of other applications are ignored undecoded', () async {
       final lookup = FakeLookup(
         () => answer('alice.example', [

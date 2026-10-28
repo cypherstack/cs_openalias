@@ -160,6 +160,7 @@ void main() {
       domain: 'alice.example',
       address: 'address',
       fields: fields,
+      ttl: const Duration(seconds: 300),
     );
     fields['recipient_address'] = 'changed';
     expect(recipient.fields['recipient_address'], 'address');
