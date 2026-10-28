@@ -29,9 +29,10 @@ try {
 
 `isOpenAlias` tells whether input is an alias at all. The lookup lowercases
 it and turns `user@domain` into `user.domain`; `recipient.domain` is that
-name, and `recipient.ttl` is how long the answer may be reused: the smallest
-remaining TTL of the TXT set and its CNAME chain. `isOpenAliasApplication`
-tells whether a string is a valid application tag.
+name, and `recipient.ttl` is how long the answer may be reused, counted from
+when the lookup completes: the smallest remaining TTL of the TXT set and its
+CNAME chain. `isOpenAliasApplication` tells whether a string is a valid
+application tag.
 
 ## Network and trust
 

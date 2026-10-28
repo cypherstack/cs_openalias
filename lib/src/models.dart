@@ -21,8 +21,8 @@ final class CsOpenAliasRecipient {
   /// untrusted display text.
   final Map<String, String> fields;
 
-  /// How long the answer may be reused: the smallest remaining TTL of the
-  /// TXT set and its CNAME chain.
+  /// How long the answer may be reused, counted from when the lookup
+  /// completes: the smallest remaining TTL of the TXT set and its CNAME chain.
   final Duration ttl;
 
   CsOpenAliasRecipient({
