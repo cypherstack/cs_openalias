@@ -105,6 +105,34 @@ void main() {
         alias: 'alias.example',
       ).result;
       expect(chained.ttl, const Duration(seconds: 17));
+      final shortRecord = await start(
+        FakeLookup(
+          () => DnssecResult(
+            question: 'alias.example',
+            recordType: 16,
+            canonicalName: 'bob.other.example',
+            status: DnssecStatus.secure,
+            records: [
+              txtRecord(
+                'bob.other.example',
+                utf8.encode('v=spf1 -all'),
+                ttl: 30,
+              ),
+              txtRecord('bob.other.example', utf8.encode(_alice), ttl: 60),
+            ],
+            aliases: [
+              DnssecRecord(
+                name: 'alias.example',
+                type: 5,
+                ttl: 300,
+                data: 'bob.other.example',
+              ),
+            ],
+          ),
+        ),
+        alias: 'alias.example',
+      ).result;
+      expect(shortRecord.ttl, const Duration(seconds: 30));
     });
 
     test('records of other applications are ignored undecoded', () async {
