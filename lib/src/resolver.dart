@@ -172,7 +172,7 @@ CsOpenAliasRecipient _recipient(
     domain: domain,
     address: selected.address,
     fields: selected.record.fields,
-    ttl: Duration(seconds: math.max(0, ttl)),
+    ttl: Duration(seconds: ttl),
   );
 }
 
